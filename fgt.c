@@ -3,7 +3,7 @@
 
 typedef struct {
 	char 			filename[128];
-	unsigned long 	sample;
+	unsigned long 	allele;
 } Sample;
 
 int uniquePairs(unsigned long p1, unsigned long p2)
@@ -39,9 +39,9 @@ int main(int argc, char* argv[])
 	char filename[128];
 	char numbers[24];
 
-	Sample *samples;
+	Sample *loci;
 
-	samples = calloc(200000, sizeof(Sample));
+	loci = calloc(200000, sizeof(Sample));
 
 
 	unsigned long ns = 0;
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
 			"%c %c %c %c "
 			"%c %c %c %c "
 			"%c %c %c %c", 
-			samples[ns].filename, 
+			loci[ns].filename, 
 			&numbers[0],
 			&numbers[1],
 			&numbers[2],
@@ -87,17 +87,17 @@ int main(int argc, char* argv[])
 		/* convert numbers into an integer */
 		unsigned long n = 0;
 
-		samples[ns].sample = 0;
+		loci[ns].allele = 0;
 
 		for (short i = 0; i < 24; i++)
 		{
-			samples[ns].sample <<= 1;
-			samples[ns].sample |= numbers[i] == '0' ? 0UL : 1UL;
+			loci[ns].allele <<= 1;
+			loci[ns].allele |= numbers[i] == '0' ? 0UL : 1UL;
 		}
 
 		/*
 		printf("[%s] - %s - 0x%x\n", line, 
-				samples[ns].filename, samples[ns].sample); 
+				loci[ns].filename, loci[ns].allele); 
 		*/
 		ns++;
 	}
@@ -108,11 +108,11 @@ int main(int argc, char* argv[])
 
 	fclose(file);
 
-	/* samples are in samples[] ... run a double loop to compare */
-	/* ns holds the number of samples read */
+	/* loci are in loci[] ... run a double loop to compare */
+	/* ns holds the number of loci read */
 	
 	unsigned long uniques = 0;
-	fprintf(stderr, "Processing %ld samples\n", ns);
+	fprintf(stderr, "Processing %ld loci\n", ns);
 	for (unsigned long int row = 0; row < ns - 1; row++)
 	{
 		if (row % 100 == 0)
@@ -120,16 +120,16 @@ int main(int argc, char* argv[])
 
 		for (unsigned long int cmp_row = row + 1; cmp_row < ns; cmp_row++)
 		{
-			if (uniquePairs(samples[row].sample, samples[cmp_row].sample) == 4)
+			if (uniquePairs(loci[row].allele, loci[cmp_row].allele) == 4)
 			{
 				uniques++;
 				printf("%s %s\n", 
-						samples[row].filename, samples[cmp_row].filename);
+						loci[row].filename, loci[cmp_row].filename);
 			}
 		}
 	}
 
-	fprintf(stderr, "\nFound %ld sample matches\n", uniques);
+	fprintf(stderr, "\nFound %ld allele matches\n", uniques);
 
     return 0;
 
