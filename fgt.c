@@ -16,13 +16,13 @@ int uniquePairs(unsigned long p1, unsigned long p2)
 		register unsigned long p1_bit = p1 & bitMask;
 		register unsigned long p2_bit = p2 & bitMask;
 
-		if (p1_bit && p2_bit)
+		if (p1_bit && p2_bit) /*if both are 1*/
 			uniques[0] = 1;
-		else if (p1_bit)
+		else if (p1_bit)	/*if p1 is one and p2 is 0*/
 			uniques[1] = 1;
-		else if (p2_bit)
+		else if (p2_bit)	/*if p2 is 1 and p1 is 0*/
 			uniques[2] = 1;
-		else
+		else				/*both are 0 (all the others are false)*/
 			uniques[3] = 1;
 
 		bitMask <<= 1;
