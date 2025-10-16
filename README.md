@@ -22,7 +22,7 @@ loci_3 0 0 0 1 1 1
 
 This can easily be acheived using bcftools:
 
-`bcftools query -f "%CHROM\_%POS[ %GT]\n" input.vcf.gz > binary_alleles_output.txt`
+`bcftools query -f '%CHROM\_%POS[ %GT]' input.vcf.gz > binary_alleles_output.txt`
 
 ### Output
 
